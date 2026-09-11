@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/suspend-trials",
+      "schedule": "0 19 * * *"
+    }
+  ]
+}
