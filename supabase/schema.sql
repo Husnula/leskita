@@ -213,15 +213,17 @@ create policy "Users can update own profile." on profiles for update using (auth
 
 -- Helper function to get current user's tenant_id (for TEACHER)
 create or replace function get_my_tenant_id()
-returns uuid as $$
-  select tenant_id from profiles where id = auth.uid() limit 1;
-$$ language sql security definer;
+returns uuid
+language sql security definer set search_path = public, pg_temp as $
+  select tenant_id from public.profiles where id = auth.uid() limit 1;
+$;
 
 -- Helper function to check if current user is ADMIN
 create or replace function is_admin()
-returns boolean as $$
+returns boolean
+language sql security definer set search_path = public, pg_temp as $
   select exists (
-    select 1 from profiles where id = auth.uid() and role = 'ADMIN'
+    select 1 from public.profiles where id = auth.uid() and role = 'ADMIN'
   );
 $$ language sql security definer;
 
